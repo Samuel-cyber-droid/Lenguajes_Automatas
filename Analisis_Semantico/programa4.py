@@ -1,8 +1,3 @@
-""
-Created on Wed Feb  5 10:56:21 2025
-
-@author: mires
-"""
 import ply.lex as lex
 from difflib import SequenceMatcher
 
