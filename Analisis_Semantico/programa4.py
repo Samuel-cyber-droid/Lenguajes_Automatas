@@ -47,5 +47,5 @@ def main():
     indice_jaccard = jaccard_index(telefono1, telefono2)
     print(f"Índice de Jaccard: {indice_jaccard:.2f}")
 
-if _name_ == "_main_":
+if __name__ == "_main_":
     main()
