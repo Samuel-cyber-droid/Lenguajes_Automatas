@@ -1,6 +1,6 @@
 # Importar librerías
-import ply.lex as lex
-import ply.yacc as yacc
+import ply.lex as lex 
+import ply.yacc as yacc 
 import sys
 
 # Definición de tokens
@@ -8,7 +8,7 @@ tokens = ['NUMBER']
 
 # Definición de expresión regular para números enteros
 def t_NUMBER(t):
-    r'\d+'
+    r'\d{1,9}'
     t.value = int(t.value)
     return t
 
@@ -33,14 +33,14 @@ def p_error(p):
     if p is None:
         print("Error de sintaxis: entrada inesperada")
     else:
-        print("Error de sintaxis en '%s'" % p.value)
+        print("Error de sintaxis en '%s'" % p.value + "o numero muy grande")
     sys.exit(1)
 
 # Construcción del parser
 parser = yacc.yacc()
 
 # Ejemplo de uso
-data = "6"
+data = "6234567652"
 lexer.input(data)
 
 # Obtener los tokens reconocidos
