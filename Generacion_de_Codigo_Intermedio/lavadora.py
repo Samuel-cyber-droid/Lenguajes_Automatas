@@ -121,3 +121,24 @@ def p_comando_set_agua(p):
 def p_comando_set_temperatura(p):
     'comando : SET TEMPERATURA NUMERO'
     lavadora.setTemperatura(p[3])
+
+def p_comando_iniciar(p):
+    'comando : INICIAR'
+    lavadora.iniciarCicloLavado()
+
+def p_error(p):
+    print("Error de sintaxis")
+
+# crear parser
+parser = yacc.yacc()
+
+# crear instancia lavadora
+lavadora = Lavadora()
+
+# ciclo de lectura de comandos
+while True:
+    try:
+        s = input('Lavadora > ')
+    except EOFError:
+        break
+    parser.parse(s)
