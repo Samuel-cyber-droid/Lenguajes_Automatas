@@ -1,0 +1,107 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> comando
+Rule 1     comando -> ENCENDER
+Rule 2     comando -> APAGAR
+Rule 3     comando -> SET AGUA NUMERO
+Rule 4     comando -> SET TEMPERATURA NUMERO
+Rule 5     comando -> INICIAR
+
+Terminals, with rules where they appear
+
+AGUA                 : 3
+APAGAR               : 2
+ENCENDER             : 1
+INICIAR              : 5
+NUMERO               : 3 4
+SET                  : 3 4
+TEMPERATURA          : 4
+error                : 
+
+Nonterminals, with rules where they appear
+
+comando              : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . comando
+    (1) comando -> . ENCENDER
+    (2) comando -> . APAGAR
+    (3) comando -> . SET AGUA NUMERO
+    (4) comando -> . SET TEMPERATURA NUMERO
+    (5) comando -> . INICIAR
+
+    ENCENDER        shift and go to state 2
+    APAGAR          shift and go to state 3
+    SET             shift and go to state 4
+    INICIAR         shift and go to state 5
+
+    comando                        shift and go to state 1
+
+state 1
+
+    (0) S' -> comando .
+
+
+
+state 2
+
+    (1) comando -> ENCENDER .
+
+    $end            reduce using rule 1 (comando -> ENCENDER .)
+
+
+state 3
+
+    (2) comando -> APAGAR .
+
+    $end            reduce using rule 2 (comando -> APAGAR .)
+
+
+state 4
+
+    (3) comando -> SET . AGUA NUMERO
+    (4) comando -> SET . TEMPERATURA NUMERO
+
+    AGUA            shift and go to state 6
+    TEMPERATURA     shift and go to state 7
+
+
+state 5
+
+    (5) comando -> INICIAR .
+
+    $end            reduce using rule 5 (comando -> INICIAR .)
+
+
+state 6
+
+    (3) comando -> SET AGUA . NUMERO
+
+    NUMERO          shift and go to state 8
+
+
+state 7
+
+    (4) comando -> SET TEMPERATURA . NUMERO
+
+    NUMERO          shift and go to state 9
+
+
+state 8
+
+    (3) comando -> SET AGUA NUMERO .
+
+    $end            reduce using rule 3 (comando -> SET AGUA NUMERO .)
+
+
+state 9
+
+    (4) comando -> SET TEMPERATURA NUMERO .
+
+    $end            reduce using rule 4 (comando -> SET TEMPERATURA NUMERO .)
+

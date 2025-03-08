@@ -2,7 +2,7 @@ import ply.lex as lex
 import ply.yacc as yacc
 import time
 
-# clase de la lavadora
+# Clase de la lavadora
 class Lavadora:
     def __init__(self):
         self.encendida = False
@@ -12,31 +12,31 @@ class Lavadora:
 
     def encender(self):
         self.encendida = True
-        print("Lavadora encendida")
-    
+        print("Lavadora encendida.")
+
     def apagar(self):
         self.encendida = False
-        print("Lavadora apagada")
+        print("Lavadora apagada.")
 
     def setNivelAgua(self, nivel):
         if 0 <= nivel <= 100:
             self.nivelAgua = nivel
             print(f"Nivel de agua establecido a {nivel}%.")
         else:
-            print("Nivel de agua no valido.")
-    
+            print("Nivel de agua no válido.")
+
     def setTemperatura(self, temperatura):
         if 30 <= temperatura <= 90:
             self.temperatura = temperatura
             print(f"Temperatura establecida a {temperatura}°C.")
         else:
-            print("Temperatura no valida.")
+            print("Temperatura no válida.")
 
     def iniciarCicloLavado(self):
         if not self.encendida:
-            print("La lavadora esta apagada. Enciendela Primero.")
+            print("La lavadora está apagada. Enciéndela primero.")
             return
-        
+
         print("Iniciando ciclo de lavado...")
         self.llenarAgua()
         self.calentarAgua()
@@ -52,13 +52,13 @@ class Lavadora:
 
     def calentarAgua(self):
         print(f"Calentando el agua a {self.temperatura}°C...")
-        time.sleep(2)
-        print("Agua calentada a {self.temperatura}°C.")
+        time.sleep(3)
+        print(f"Agua calentada a {self.temperatura}°C.")
 
     def lavar(self):
         print("Lavando la ropa...")
-        time.spleep(self.duracionCiclo)
-        print("Lavado Completado")
+        time.sleep(self.duracionCiclo)
+        print("Lavado completado.")
 
     def enjuagar(self):
         print("Enjuagando la ropa...")
@@ -68,9 +68,10 @@ class Lavadora:
     def centrifugar(self):
         print("Centrifugando la ropa...")
         time.sleep(2)
-        print("Centrifugado completado")
+        print("Centrifugado completado.")
 
-# Analizador Lexico
+
+# Analizador léxico
 tokens = (
     'ENCENDER',
     'APAGAR',
@@ -78,34 +79,34 @@ tokens = (
     'AGUA',
     'TEMPERATURA',
     'INICIAR',
-    'NUMERO'
-)    
+    'NUMERO',
+)
 
-#Expresiones Regulares para tokens
-t_ENCENDER = r'encender'
-t_APAGAR = r'apagar'   
-t_SET = r'set'
-t_AGUA = r'agua'
-t_TEMPERATURA = r'temperatura'
-t_INICIAR = r'iniciar'
+# Expresiones regulares para tokens
+t_ENCENDER = r'ENCENDER'
+t_APAGAR = r'APAGAR'
+t_SET = r'SET'
+t_AGUA = r'AGUA'
+t_TEMPERATURA = r'TEMPERATURA'
+t_INICIAR = r'INICIAR'
 
 def t_NUMERO(t):
     r'\d+'
     t.value = int(t.value)
     return t
 
-# ignorar espacios y tabs
+# Ignorar espacios y tabulaciones
 t_ignore = ' \t'
 
-# Manejo de errores
+# Manejo de errores léxicos
 def t_error(t):
-    print(f"Caracter no valido: {t.value[0]}")
+    print(f"Carácter ilegal: {t.value[0]}")
     t.lexer.skip(1)
 
-# creacion del lex
+# Crear el lexer
 lexer = lex.lex()
 
-# analizador sintactico
+# Analizador sintáctico
 def p_comando_encender(p):
     'comando : ENCENDER'
     lavadora.encender()
@@ -127,18 +128,18 @@ def p_comando_iniciar(p):
     lavadora.iniciarCicloLavado()
 
 def p_error(p):
-    print("Error de sintaxis")
+    print("Error de sintaxis.")
 
-# crear parser
+# Crear el parser
 parser = yacc.yacc()
 
-# crear instancia lavadora
+# Instancia de la lavadora
 lavadora = Lavadora()
 
-# ciclo de lectura de comandos
+# Bucle principal
 while True:
     try:
-        s = input('Lavadora > ')
+        comando = input("> ")
+        parser.parse(comando)
     except EOFError:
         break
-    parser.parse(s)
