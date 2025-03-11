@@ -1,4 +1,4 @@
-extern create nom;
+extern crate nom;
 
 use nom::{
     branch::alt,
