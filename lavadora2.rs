@@ -1,4 +1,4 @@
-extern creare nom;
+extern create nom;
 
 use nom::{
     branch::alt,
