@@ -1,3 +1,5 @@
+extern creare nom;
+
 use nom::{
     branch::alt,
     bytes::complete::tag,
