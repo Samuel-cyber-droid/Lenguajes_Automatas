@@ -19,7 +19,7 @@ class Lavadora:
         print("Lavadora apagada.")
 
     def setNivelAgua(self, nivel):
-        if 0 <= nivel <= 100:
+        if 1 <= nivel <= 100:
             self.nivelAgua = nivel
             print(f"Nivel de agua establecido a {nivel}%.")
         else:
