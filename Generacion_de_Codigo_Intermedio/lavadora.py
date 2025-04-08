@@ -72,6 +72,7 @@ class Lavadora:
                 return False
         return True
 
+    #  Optimizado: validacion unificada y tiempo total acumulado
     def iniciarCicloLavado(self):
         if not self._validar_ciclo():
             return
