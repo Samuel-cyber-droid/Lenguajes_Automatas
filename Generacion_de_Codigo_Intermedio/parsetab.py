@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'AGUA APAGAR ENCENDER INICIAR NUMERO SET TEMPERATURAcomando : ENCENDERcomando : APAGARcomando : SET AGUA NUMEROcomando : SET TEMPERATURA NUMEROcomando : INICIAR'
+_lr_signature = 'AGUA APAGAR ENCENDER INICIAR NUMERO SET TEMPERATURAcomando : ENCENDER\n| APAGAR\n| INICIARcomando : SET AGUA NUMERO\n| SET TEMPERATURA NUMERO'
     
-_lr_action_items = {'ENCENDER':([0,],[2,]),'APAGAR':([0,],[3,]),'SET':([0,],[4,]),'INICIAR':([0,],[5,]),'$end':([1,2,3,5,8,9,],[0,-1,-2,-5,-3,-4,]),'AGUA':([4,],[6,]),'TEMPERATURA':([4,],[7,]),'NUMERO':([6,7,],[8,9,]),}
+_lr_action_items = {'ENCENDER':([0,],[2,]),'APAGAR':([0,],[3,]),'INICIAR':([0,],[4,]),'SET':([0,],[5,]),'$end':([1,2,3,4,8,9,],[0,-1,-2,-3,-4,-5,]),'AGUA':([5,],[6,]),'TEMPERATURA':([5,],[7,]),'NUMERO':([6,7,],[8,9,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -27,9 +27,9 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> comando","S'",1,None,None,None),
-  ('comando -> ENCENDER','comando',1,'p_comando_encender','lavadora.py',110),
-  ('comando -> APAGAR','comando',1,'p_comando_apagar','lavadora.py',114),
-  ('comando -> SET AGUA NUMERO','comando',3,'p_comando_set_agua','lavadora.py',118),
-  ('comando -> SET TEMPERATURA NUMERO','comando',3,'p_comando_set_temperatura','lavadora.py',122),
-  ('comando -> INICIAR','comando',1,'p_comando_iniciar','lavadora.py',126),
+  ('comando -> ENCENDER','comando',1,'p_comando_simple','lavadora.py',97),
+  ('comando -> APAGAR','comando',1,'p_comando_simple','lavadora.py',98),
+  ('comando -> INICIAR','comando',1,'p_comando_simple','lavadora.py',99),
+  ('comando -> SET AGUA NUMERO','comando',3,'p_comando_param','lavadora.py',108),
+  ('comando -> SET TEMPERATURA NUMERO','comando',3,'p_comando_param','lavadora.py',109),
 ]

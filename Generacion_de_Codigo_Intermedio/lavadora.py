@@ -2,13 +2,14 @@ import ply.lex as lex
 import ply.yacc as yacc
 import time
 
-# Clase de la lavadora
 class Lavadora:
+    __slots__ = ('encendida', 'nivelAgua', 'temperatura', 'duracionCiclo')
+
     def __init__(self):
         self.encendida = False
         self.nivelAgua = 0
         self.temperatura = 30
-        self.duracionCiclo = 30
+        self.duracionCiclo = 2  # Más corto para pruebas
 
     def encender(self):
         self.encendida = True
@@ -23,14 +24,14 @@ class Lavadora:
             self.nivelAgua = nivel
             print(f"Nivel de agua establecido a {nivel}%.")
         else:
-            print("Nivel de agua no válido.")
+            print("Nivel de agua no válido (1-100).")
 
     def setTemperatura(self, temperatura):
         if 30 <= temperatura <= 90:
             self.temperatura = temperatura
             print(f"Temperatura establecida a {temperatura}°C.")
         else:
-            print("Temperatura no válida.")
+            print("Temperatura no válida (30-90).")
 
     def iniciarCicloLavado(self):
         if not self.encendida:
@@ -38,108 +39,95 @@ class Lavadora:
             return
 
         print("Iniciando ciclo de lavado...")
-        self.llenarAgua()
-        self.calentarAgua()
-        self.lavar()
-        self.enjuagar()
-        self.centrifugar()
+        for paso in (self.llenarAgua, self.calentarAgua, self.lavar, self.enjuagar, self.centrifugar):
+            paso()
         print("Ciclo de lavado completado.")
 
     def llenarAgua(self):
-        print("Llenando la lavadora con agua...")
-        time.sleep(2)
-        print(f"Lavadora llena al {self.nivelAgua}%.")
+        print("Llenando agua...")
+        time.sleep(1)
+        print(f"Agua llena al {self.nivelAgua}%.")
 
     def calentarAgua(self):
-        print(f"Calentando el agua a {self.temperatura}°C...")
-        time.sleep(3)
-        print(f"Agua calentada a {self.temperatura}°C.")
+        print(f"Calentando a {self.temperatura}°C...")
+        time.sleep(1)
+        print("Temperatura alcanzada.")
 
     def lavar(self):
-        print("Lavando la ropa...")
+        print("Lavando...")
         time.sleep(self.duracionCiclo)
-        print("Lavado completado.")
+        print("Lavado terminado.")
 
     def enjuagar(self):
-        print("Enjuagando la ropa...")
-        time.sleep(2)
-        print("Enjuague completado.")
+        print("Enjuagando...")
+        time.sleep(1)
+        print("Enjuague listo.")
 
     def centrifugar(self):
-        print("Centrifugando la ropa...")
-        time.sleep(2)
-        print("Centrifugado completado.")
+        print("Centrifugando...")
+        time.sleep(1)
+        print("Centrifugado completo.")
 
-
-# Analizador léxico
+# ---------- LEXER ----------
 tokens = (
-    'ENCENDER',
-    'APAGAR',
-    'SET',
-    'AGUA',
-    'TEMPERATURA',
-    'INICIAR',
-    'NUMERO',
+    'ENCENDER', 'APAGAR', 'SET', 'AGUA', 'TEMPERATURA', 'INICIAR', 'NUMERO',
 )
 
-# Expresiones regulares para tokens
 t_ENCENDER = r'ENCENDER'
 t_APAGAR = r'APAGAR'
 t_SET = r'SET'
 t_AGUA = r'AGUA'
 t_TEMPERATURA = r'TEMPERATURA'
 t_INICIAR = r'INICIAR'
+t_ignore = ' \t'
 
 def t_NUMERO(t):
     r'\d+'
     t.value = int(t.value)
     return t
 
-# Ignorar espacios y tabulaciones
-t_ignore = ' \t'
-
-# Manejo de errores léxicos
 def t_error(t):
-    print(f"Carácter ilegal: {t.value[0]}")
+    print(f"Caracter no reconocido: '{t.value[0]}'")
     t.lexer.skip(1)
 
-# Crear el lexer
 lexer = lex.lex()
 
-# Analizador sintáctico
-def p_comando_encender(p):
-    'comando : ENCENDER'
-    lavadora.encender()
+# ---------- PARSER ----------
+def p_comando_simple(p):
+    '''comando : ENCENDER
+               | APAGAR
+               | INICIAR'''
+    if p[1] == 'ENCENDER':
+        lavadora.encender()
+    elif p[1] == 'APAGAR':
+        lavadora.apagar()
+    elif p[1] == 'INICIAR':
+        lavadora.iniciarCicloLavado()
 
-def p_comando_apagar(p):
-    'comando : APAGAR'
-    lavadora.apagar()
-
-def p_comando_set_agua(p):
-    'comando : SET AGUA NUMERO'
-    lavadora.setNivelAgua(p[3])
-
-def p_comando_set_temperatura(p):
-    'comando : SET TEMPERATURA NUMERO'
-    lavadora.setTemperatura(p[3])
-
-def p_comando_iniciar(p):
-    'comando : INICIAR'
-    lavadora.iniciarCicloLavado()
+def p_comando_param(p):
+    '''comando : SET AGUA NUMERO
+               | SET TEMPERATURA NUMERO'''
+    if p[2] == 'AGUA':
+        lavadora.setNivelAgua(p[3])
+    elif p[2] == 'TEMPERATURA':
+        lavadora.setTemperatura(p[3])
 
 def p_error(p):
-    print("Error de sintaxis.")
+    if p:
+        print(f"Error de sintaxis en '{p.value}'")
+    else:
+        print("Error de sintaxis: entrada vacía o incompleta.")
 
-# Crear el parser
 parser = yacc.yacc()
 
-# Instancia de la lavadora
-lavadora = Lavadora()
-
-# Bucle principal
-while True:
+# ---------- EJECUCIÓN PRINCIPAL ----------
+if __name__ == "__main__":
+    lavadora = Lavadora()
+    print("Sistema de Lavadora. Escribe comandos como: ENCENDER, SET AGUA 50, INICIAR")
     try:
-        comando = input("> ")
-        parser.parse(comando)
-    except EOFError:
-        break
+        while True:
+            entrada = input("> ")
+            if entrada.strip():
+                parser.parse(entrada, lexer=lexer)
+    except KeyboardInterrupt:
+        print("\nSaliendo del sistema...")

@@ -5,19 +5,19 @@ Grammar
 Rule 0     S' -> comando
 Rule 1     comando -> ENCENDER
 Rule 2     comando -> APAGAR
-Rule 3     comando -> SET AGUA NUMERO
-Rule 4     comando -> SET TEMPERATURA NUMERO
-Rule 5     comando -> INICIAR
+Rule 3     comando -> INICIAR
+Rule 4     comando -> SET AGUA NUMERO
+Rule 5     comando -> SET TEMPERATURA NUMERO
 
 Terminals, with rules where they appear
 
-AGUA                 : 3
+AGUA                 : 4
 APAGAR               : 2
 ENCENDER             : 1
-INICIAR              : 5
-NUMERO               : 3 4
-SET                  : 3 4
-TEMPERATURA          : 4
+INICIAR              : 3
+NUMERO               : 4 5
+SET                  : 4 5
+TEMPERATURA          : 5
 error                : 
 
 Nonterminals, with rules where they appear
@@ -31,14 +31,14 @@ state 0
     (0) S' -> . comando
     (1) comando -> . ENCENDER
     (2) comando -> . APAGAR
-    (3) comando -> . SET AGUA NUMERO
-    (4) comando -> . SET TEMPERATURA NUMERO
-    (5) comando -> . INICIAR
+    (3) comando -> . INICIAR
+    (4) comando -> . SET AGUA NUMERO
+    (5) comando -> . SET TEMPERATURA NUMERO
 
     ENCENDER        shift and go to state 2
     APAGAR          shift and go to state 3
-    SET             shift and go to state 4
-    INICIAR         shift and go to state 5
+    INICIAR         shift and go to state 4
+    SET             shift and go to state 5
 
     comando                        shift and go to state 1
 
@@ -64,44 +64,44 @@ state 3
 
 state 4
 
-    (3) comando -> SET . AGUA NUMERO
-    (4) comando -> SET . TEMPERATURA NUMERO
+    (3) comando -> INICIAR .
+
+    $end            reduce using rule 3 (comando -> INICIAR .)
+
+
+state 5
+
+    (4) comando -> SET . AGUA NUMERO
+    (5) comando -> SET . TEMPERATURA NUMERO
 
     AGUA            shift and go to state 6
     TEMPERATURA     shift and go to state 7
 
 
-state 5
-
-    (5) comando -> INICIAR .
-
-    $end            reduce using rule 5 (comando -> INICIAR .)
-
-
 state 6
 
-    (3) comando -> SET AGUA . NUMERO
+    (4) comando -> SET AGUA . NUMERO
 
     NUMERO          shift and go to state 8
 
 
 state 7
 
-    (4) comando -> SET TEMPERATURA . NUMERO
+    (5) comando -> SET TEMPERATURA . NUMERO
 
     NUMERO          shift and go to state 9
 
 
 state 8
 
-    (3) comando -> SET AGUA NUMERO .
+    (4) comando -> SET AGUA NUMERO .
 
-    $end            reduce using rule 3 (comando -> SET AGUA NUMERO .)
+    $end            reduce using rule 4 (comando -> SET AGUA NUMERO .)
 
 
 state 9
 
-    (4) comando -> SET TEMPERATURA NUMERO .
+    (5) comando -> SET TEMPERATURA NUMERO .
 
-    $end            reduce using rule 4 (comando -> SET TEMPERATURA NUMERO .)
+    $end            reduce using rule 5 (comando -> SET TEMPERATURA NUMERO .)
 
